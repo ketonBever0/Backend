@@ -14,7 +14,7 @@ const getKutyanevek=(req,res)=>{
 
 const postKutyanevek=(req,res)=>{
     // res.json({message:"Kutyanév hozzáadása"})
-    db.run('insert into kutyanevek (id,kutyanev) values(?,?)',[req.body.id,req.body.kutyanev],(err)=>{
+    db.run('insert into kutyanevek (kutyanev) values(?)',[req.body.kutyanev],(err)=>{
         if(err){
             res.send(err)
         }else{
@@ -25,7 +25,7 @@ const postKutyanevek=(req,res)=>{
 
 const patchKutyanevek=(req,res)=>{
     // res.json({message:"Kutyanév módosítása"})
-    db.run('update kutyanevek set kutyanev=? where id=?',[req.body.kutyanev,req.body.id],(err)=>{
+    db.run('update kutyanevek set kutyanev=? where id=?',[req.body.kutyanev,req.params.id],(err)=>{
         if(err){
             res.send(err)
         }else{
@@ -36,7 +36,7 @@ const patchKutyanevek=(req,res)=>{
 
 const deleteKutyanevek=(req,res)=>{
     // res.json({message:"Kutyanév törlése"})
-    db.run('delete from kutyanevek where id=?',[req.body.id],(err)=>{
+    db.run('delete from kutyanevek where id=?',[req.params.id],(err)=>{
         if(err){
             res.send(err)
         }else{
@@ -45,9 +45,24 @@ const deleteKutyanevek=(req,res)=>{
     })
 }
 
+
+const getKutyafajtak=(req,res)=>{
+    db.all('select * from kutyafajtak',(err,rows)=>{
+        if(err){
+            res.send(err)
+        }else{
+            res.json(rows)
+        }
+    })
+}
+
+
+
 module.exports={
     getKutyanevek,
     postKutyanevek,
     patchKutyanevek,
-    deleteKutyanevek
+    deleteKutyanevek,
+
+    getKutyafajtak
 }

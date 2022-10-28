@@ -4,8 +4,8 @@ const contr=require('../controllers/kutyanev_contr');
 
 router.get('/',contr.getKutyanevek);
 router.post('/',contr.postKutyanevek);
-router.patch('/',contr.patchKutyanevek);
-router.delete('/',contr.deleteKutyanevek);
+router.patch('/:id',contr.patchKutyanevek);
+router.delete('/:id',contr.deleteKutyanevek);
 
 
 module.exports=router;
