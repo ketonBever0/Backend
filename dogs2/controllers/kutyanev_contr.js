@@ -46,15 +46,6 @@ const deleteKutyanevek=(req,res)=>{
 }
 
 
-const getKutyafajtak=(req,res)=>{
-    db.all('select * from kutyafajtak',(err,rows)=>{
-        if(err){
-            res.send(err)
-        }else{
-            res.json(rows)
-        }
-    })
-}
 
 
 
@@ -62,7 +53,5 @@ module.exports={
     getKutyanevek,
     postKutyanevek,
     patchKutyanevek,
-    deleteKutyanevek,
-
-    getKutyafajtak
+    deleteKutyanevek
 }
