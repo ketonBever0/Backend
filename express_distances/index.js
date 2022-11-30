@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 
 
-const run = async ()=>{
+const run = async () => {
 
     app.use(cors());
     app.use(express.json());
@@ -16,15 +16,29 @@ const run = async ()=>{
 
     app.get("/", (req, res) => res.send("Distance API"));
 
+    let distance="";
 
 
-    const response=await fetch("https://www.distance24.org/route.json?stops=Sopron|Szeged");
-    const distance=await response.json();
+    try {
+        const response = await fetch("https://www.distance24.org/route.json?stops=Sopron|Szeged");
+        distance = await response.json();
+    }
+    catch{
+        distance={error:"Nem jó az api a gyászba vele... xd"};
+    }
+    
 
 
 
 
-    app.get("/distance",(req,res)=>{res.json(distance)});
+    app.get("/distance", (req, res) => {
+        try {
+            res.json(distance)
+        }
+        catch {
+            res.send(`<h1>${distance}</h2>`)
+        }
+    });
 
 
 
