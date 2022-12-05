@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const controller = require('./controller/telepules_controller');
 
 app.use(cors());
 app.use(express.json());
@@ -11,10 +12,12 @@ app.listen(8000,()=>console.log("Server started!"));
 
 app.get('/',(req, res)=>res.send("Magyarország települései API"))
 
-const controller = require('./controller');
 
 
-app.get('/telepulesek',controller.getTelepulesek);
+
+app.use('/api/telepulesek', require('./routes/telepules_routes'))
+
+
 
 
 app.get('/koordinata/:telepulesnev',controller.getKoordinataByTelepulesnev);
