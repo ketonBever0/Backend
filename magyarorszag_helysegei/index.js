@@ -17,9 +17,11 @@ app.get('/',(req, res)=>res.send("Magyarország települései API"))
 
 app.use('/api/telepulesek', require('./routes/telepules_routes'))
 
+app.use('/api/megyek', require('./routes/megye_routes'))
 
 
 
+//  volt feladat
 app.get('/koordinata/:telepulesnev',controller.getKoordinataByTelepulesnev);
 
 app.get('/iranyitoszam/:telepulesnev',controller.getIrszamByTelepulesnev);
