@@ -10,14 +10,16 @@ app.use(express.urlencoded({ extended: true }));
 
 app.listen(8000,()=>console.log("Server started!"));
 
-app.get('/',(req, res)=>res.send("Magyarország települései API"))
+app.get('/',(req, res)=>res.send("Magyarország települései API"));
 
 
 
 
-app.use('/api/telepulesek', require('./routes/telepules_routes'))
+app.use('/api/telepulesek', require('./routes/telepules_routes'));
 
-app.use('/api/megyek', require('./routes/megye_routes'))
+app.use('/api/megyek', require('./routes/megye_routes'));
+
+app.use('/api/telepulestipus',require('./routes/jogallas_routes'));
 
 
 
