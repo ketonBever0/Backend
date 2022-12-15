@@ -4,9 +4,10 @@ const c = require('../controllers/game_contr');
 
 
 router.get('/',c.getGames);
-router.post('/',c.postGames);
-router.patch('/:id',c.patchGames);
-router.delete('/:id',c.deleteGames);
+router.post('/',c.postGame);
+router.patch('/:id',c.patchGameById);
+router.delete('/:id',c.deleteGameById);
+
 
 
 module.exports = router;
