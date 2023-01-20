@@ -19,12 +19,12 @@ app.use(cors());
 app.use(errorHandler);
 
 
-mongoose.connect('mongodb://localhost:27017/login',
+mongoose.connect('mongodb://127.0.0.1:27017/login',
     () => { console.log("Connected!") },
     (e) => { console.log(e) });
 
 
-app.listen(8000, () => { console.log("Running!") });
+app.listen(8001, () => { console.log("Running!") });
 
 app.get('/', (req, res) => res.send("MongoDB demo"));
 
