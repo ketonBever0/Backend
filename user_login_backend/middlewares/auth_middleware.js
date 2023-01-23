@@ -16,12 +16,14 @@ const protect = asyncHandler(async (req, res, next) => {
             throw new Error("Be kell jelentkezni!");
         }
 
-        if (!token) {
-            res.status(401);
-            throw new Error("Be kell jelentkezni!");
-        }
+
+    }
+
+    if (!token) {
+        res.status(401);
+        throw new Error("Be kell jelentkezni!");
 
     }
 })
 
-module.exports=protect;
+module.exports = protect;

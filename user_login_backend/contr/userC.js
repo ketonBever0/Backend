@@ -7,7 +7,7 @@ const User = require('../models/User');
 
 
 const genToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 30 });
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 }
 
 
@@ -40,10 +40,11 @@ const register = asyncHandler(async (req, res) => {
         age: age
     });
 
-    res.json(ujUser);
 
 
+    const token = genToken(ujUser.id);
 
+    res.json(token);
 
 
 });
@@ -66,8 +67,6 @@ const login = asyncHandler(async (req, res) => {
 
     const token = genToken(user.id);
 
-
-
     res.status(200).json(token);
 
 });
@@ -75,13 +74,13 @@ const login = asyncHandler(async (req, res) => {
 
 
 const getUser = asyncHandler(async (req, res) => {
-    const user = (req.user);
+    const user = req.user;
     res.json(user);
 })
 
 
-const modifyUser=asyncHandler(async (req,res)=>{
-    res.json({message:"Felhasználó adatmódosítás"});
+const modifyUser = asyncHandler(async (req, res) => {
+    res.json({ message: "Felhasználó adatmódosítás" });
 })
 
 

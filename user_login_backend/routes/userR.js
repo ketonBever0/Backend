@@ -3,7 +3,6 @@ const r = express.Router();
 const protect = require('../middlewares/auth_middleware');
 
 const userC = require('../contr/userC');
-const { Router } = require('express');
 
 r.post('/register', userC.register);
 r.post('/login', userC.login);
