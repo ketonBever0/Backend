@@ -73,7 +73,7 @@ app.get('/varos/:varos/keszultseg/:keszultseg', (req: any, res: any) => {
         db.all(
             query,
             (err: any, rows: any) => {
-                if (err) res.send(err);
+                if (err) res.status(400).send(err);
                 else {
                     if (rows.length > 0) res.json(rows);
                     else res.json({ message: 'Nincs ilyen adat' });
@@ -96,7 +96,7 @@ app.get('/vizallas/:varos', (req: any, res: any) => {
             WHERE LOWER(v.varos)=LOWER('${varos}')
         `,
         (err: any, rows: any) => {
-            if (err) res.send(err);
+            if (err) res.status(400).send(err);
             else {
                 if (rows.length > 0) res.json(rows);
                 else res.json({ message: 'Nincs ilyen adat' });
@@ -107,52 +107,76 @@ app.get('/vizallas/:varos', (req: any, res: any) => {
 });
 
 
-app.post('/ujvizallas', (req: any, res: any) => {
+app.post('/ujvizallas', async (req: any, res: any) => {
     const { varos, nap, ido, vizAllas } = req.body;
 
-    var id: any = null;
-    var vmId: any = null;
+    //  példa
+    //  {
+    //     "varos": "tiszabecs",
+    //     "nap": "2023-03-20",
+    //     "ido": "15:00",
+    //     "vizAllas": 300
+    //  }
+
+    let id: any = null;
+    let vmId: any = null;
 
     //  Id
-    db.all(
-        `
-            SELECT MAX(id) id
-            FROM meres
-        `,
-        (err: any, rows: any) => {
-            if (err) res.send(err);
-            else {
-                if (rows.length > 0) id = rows[0].id;
-                else res.json({ message: "Id generálás elhasalt" });
-            }
-        }
-    );
+    const getId = (db: any) => {
+        return new Promise((resolve, reject) => {
+            db.all(
+                `
+                SELECT MAX(id)+1 id
+                FROM meres
+            `,
+                (err: any, rows: any) => {
+                    if (err) reject(err);
+                    else {
+                        if (rows.length > 0) resolve(rows[0].id);
+                        else res.status(400).json({ message: "Id generálás elhasalt" });
+                    }
+                }
+            );
+        })
+    }
+
+    id = await getId(db);
 
 
-
-    //  Település
-    db.all(
-        `
+    //  Település id
+    const getVarosId = (db: any, varos: any) => {
+        return new Promise((resolve, reject) => {
+            db.all(
+                `
             SELECT DISTINCT v.id
             FROM vizmerce v
             JOIN meres m ON (v.id=m.vmId)
             WHERE LOWER(v.varos)=LOWER('${varos}');
         `,
-        (err: any, rows: any) => {
-            if (err) res.send(err);
-            else {
-                if (rows.length > 0) vmId = rows[0].id;
-                else res.json({ message: "Adatbázisban nem szereplő települést adott meg! (neve kell, nem azonosító)" });
-            }
-        }
-    );
+                (err: any, rows: any) => {
+                    if (err) reject(err);
+                    else {
+                        if (rows.length > 0) resolve(rows[0].id);
+                        else res.status(400).json({ message: "Adatbázisban nem szereplő települést adott meg! (neve kell, nem azonosító)" });
+                    }
+                }
+            );
+        })
+    }
+
+    vmId = await getVarosId(db, varos);
 
     if (id == null || vmId == null) return;
     else {
         db.run(
             `
-            
-            `
+                INSERT INTO meres (id, vmId, nap, ido, vizAllas)
+                VALUES (${id}, ${vmId}, "${nap}", "${ido}", ${vizAllas})
+            `,
+            (err: any) => {
+                if (err) res.status(400).send(err);
+                else res.status(201).json({ message: "Sikeres adatfelvitel!" });
+            }
         )
 
     }
