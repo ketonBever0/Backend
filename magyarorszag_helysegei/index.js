@@ -10,8 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.listen(8000,()=>console.log("Server started!"));
 
-app.get('/',(req, res)=>res.send("Magyarország települései API"));
 
+app.get('/',(req, res)=>res.send("Magyarország települései API"));
 
 
 
