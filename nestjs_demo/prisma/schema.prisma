@@ -11,20 +11,29 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String
-  hash      String?
-  firstName String?
-  lastName  String?
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  lastLogin DateTime?
+  email     String     @unique
+  username  String     @unique
+  password  String
+  firstname String?
+  lastname  String?
+  bookmarks Bookmark[]
+
+  @@map("users")
 }
 
 model Bookmark {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now())
   title       String
   description String?
   link        String
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
 }
