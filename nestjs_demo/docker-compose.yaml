@@ -1,0 +1,10 @@
+version: '4.22'
+services:
+  dev-db:
+    image: postgres:15
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: dockeruser
+      POSTGRES_PASSWORD: docker123
+      POSTGRES_DB: nestjs_demo
