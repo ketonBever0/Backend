@@ -6,15 +6,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        Int        @id @default(autoincrement())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
-  lastLogin DateTime?
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @map("updated_at")
+  lastLogin DateTime?  @map("last_login")
   email     String     @unique
   username  String     @unique
   password  String
@@ -27,12 +27,12 @@ model User {
 
 model Bookmark {
   id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   title       String
   description String?
   link        String
-  userId      Int
+  userId      Int      @map("user_id")
   user        User     @relation(fields: [userId], references: [id])
 
   @@map("bookmarks")
